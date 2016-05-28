@@ -1,0 +1,32 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+long long int binsearch(long long int arr[],long long int l,long long u,long long val ){
+//for arrays sorted in ascending order only
+//also the last element index here is n-1 like four if n=5
+    long long m=l,n=u,mid;
+    while(m<=n){
+        mid=(m+n)/2;
+        if(arr[mid]==val)
+            return mid;
+        else if(arr[mid]>=val)
+            n=mid-1;
+        else
+            m=mid+1;
+        }
+        if(arr[mid]==val)
+            return mid;
+        else
+            return -1;
+                                //this would occur if the element is never reached till the end this does not take care
+}
+int main(){
+long long int arr[5]={1,2,3,41,52};
+long long int t=binsearch(arr,0,4,52);
+cout<<t;
+return 0;
+}
