@@ -1,18 +1,19 @@
 #include <iostream>
+//#include <algorithms>
 using namespace std;
 
-void swap(int &a,int &b)
+void swap(long long int &a,long long int &b)
 {
     int temp=a;
     a=b;
     b=temp;
 }
 
-int partition(int a[],int l,int h)
+long long int partition(long long int a[],long long int l,long long int h)
 {
-    int pivot=a[h];
-    int i=l-1;
-    for(int j=l;j<h;j++)
+    long long int pivot=a[h];
+    long long int i=l-1;
+    for(long long int j=l;j<h;j++)
     {
         if(a[j]<=pivot)
         {
@@ -24,11 +25,11 @@ int partition(int a[],int l,int h)
     return (i+1);
 }
 
-void quicksort(int a[],int l,int h)
+void quicksort(long long int a[],long long int l,long long int h)
 {
     if(l<=h)
     {
-        int p=partition(a,l,h);
+        long long int p=partition(a,l,h);
         quicksort(a,l,p-1);
         quicksort(a,p+1,h);
     }
