@@ -1,0 +1,13 @@
+#include<bits/stdc++.h>
+#define line cout<<"\n"
+#define ll long long
+#define in(a) cin>>a
+#define out(a) cout<<a<<" "
+//lp long long pair
+#define flf(a,b,i) for(ll i=a;i<b;++i)
+#define flb(a,b,i) for(ll i=a-1;i>=b;--i)
+using namespace std;
+typedef pair<ll, ll> lp;
+int main(){
+  return 0;
+}
