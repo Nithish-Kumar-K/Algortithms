@@ -3,11 +3,23 @@
 #define ll long long
 #define in(a) cin>>a
 #define out(a) cout<<a<<" "
-//lp long long pair
 #define flf(a,b,i) for(ll i=a;i<b;++i)
 #define flb(a,b,i) for(ll i=a-1;i>=b;--i)
+#define fdiv(a,b) double(a)/double(b)
+#define idiv(a,b) ll(a/b)
+ll GCD(ll u, ll v) {
+	while (v != 0) {
+		unsigned r = u % v;
+		u = v;
+		v = r;
+	}
+	return u;
+}
+#define LCM(x,y) ((x)/Gcd(x,y)*(y))
+ll i,j,INF = 100000000000000,MOD=1000000007;
 using namespace std;
 typedef pair<ll, ll> lp;
+//lp long long pair
 int main(){
   return 0;
 }
