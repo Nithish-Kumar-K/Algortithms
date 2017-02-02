@@ -1,0 +1,156 @@
+//implements sqrt decomspostion for questions like range minimum query
+//block size is flexible and can be changed
+//time complexity for query is O(block size + no of blocks)
+//time complexity for update is O(block size)
+#include<iostream>
+#include<math.h>
+#include<list>
+#include<vector>
+#define line cout<<"\n"
+#define ll long long
+#define fdiv(a,b) double(a)/double(b)
+#define idiv(a,b) ll(a/b)
+#define in(a) cin>>a
+#define out(a) cout<<a<<" "
+//lp long long pair
+#define flf(a,b,i) for(ll i=a;i<b;++i)
+#define flb(a,b,i) for(ll i=a-1;i>=b;--i)
+//template <typename T> 
+using namespace std;
+typedef pair<ll, ll> lp;
+using namespace std;
+ll i, j, INF = 100000000000000;
+
+ll block_size, no_of_blocks;
+//calculates segment no of given segment
+ll segNo(ll ind, ll size) {
+	ll seg = ind / size;
+	double val = fdiv(ind, size);
+	if (val == floor(val)) {
+		return seg;
+	}
+	else {
+		return (seg + 1);
+	}
+}
+
+//processes one query - for all the segments that are completely in given range
+ll query(vector<ll> meta, ll left_seg_no, ll right_seg_no) {
+	ll min = INF;
+	flf(left_seg_no, right_seg_no + 1, i) {
+		if (meta[i] < min) {
+			min = meta[i];
+		}
+	}
+	return min;
+}
+
+//creates the meta array - which stores query response of all segments
+void metagen(vector<ll> arr, vector<ll> &meta, ll n) {
+	ll min = INF;
+	flf(1, no_of_blocks + 1, i) {
+		meta[i] = INF;
+	}
+	flf(1, n + 1, i) {
+		if (arr[i] < min) {
+			min = arr[i];
+		}
+		if (i % block_size == 0) {
+			meta[(i / block_size)] = min;
+			min = INF;
+		}
+	}
+	if (min != INF)meta[no_of_blocks] = min;
+}
+
+//handles all queries and calls other funcitons
+void queries(vector<ll> arr, ll n, ll q) {
+	
+	block_size = ceil(sqrt(n));
+	no_of_blocks = ceil(fdiv(n, block_size));
+
+	vector<ll> meta(no_of_blocks + 1);
+	metagen(arr, meta, n);
+
+	flf(0, q, i) {
+		char type;
+		in(type);
+		if (type == 'q') {
+			ll left_ind, right_ind, min;
+			in(left_ind); in(right_ind);
+
+			ll left_seg_val, right_seg_val;
+			left_seg_val = segNo(left_ind, block_size) + 1;
+			// +1 comes as we are ignoring the segment where the left index is present in
+			right_seg_val = segNo(right_ind, block_size) - 1;
+			//-1 for ignoring segment where the right exists
+
+			//search through the meta array- time complexity is O(block size)
+			min = query(meta, left_seg_val, right_seg_val);;
+
+			//left_seg_val and right_seg_val take value of indices for searching segments not
+			//included completely
+			//we increment left_seg_val to reverse the changes made previously and same goes
+			//for right_seg_val
+			left_seg_val--;
+			left_seg_val *= block_size;
+			right_seg_val *= block_size;
+			right_seg_val++;
+
+			//this is useful in case both l and r are there in the same segment
+			if (right_seg_val < left_ind) {
+				right_seg_val = left_ind;
+			}
+			if (left_seg_val > right_ind) {
+				left_seg_val = right_ind;
+			}
+
+			//search the portion that is not included completely in the meta array
+			//time complexity is O(block size)
+			flf(left_ind, left_seg_val + 1, i) {
+				if (arr[i] < min) {
+					min = arr[i];
+				}
+			}
+			flf(right_seg_val, right_ind + 1, i) {
+				if (arr[i] < min) {
+					min = arr[i];
+				}
+			}
+
+			cout << min << "\n";
+		}
+		else {
+			ll x, y; in(x); in(y);
+			arr[x] = y;
+			ll xseg = segNo(x, block_size);
+			ll left_seg_val = ((xseg - 1) * block_size) + 1;
+			ll right_seg_val = ((xseg)* block_size) + 1;
+			ll min = INF;
+			if (right_seg_val > n) {
+				right_seg_val = n;
+			}
+
+			//check through segment where current element exists
+			//time complexity is O(block size)
+			flf(left_seg_val, right_seg_val, i) {
+				if (arr[i] < min) {
+					min = arr[i];
+				}
+			}
+			meta[xseg] = min;
+		}
+	}
+}
+
+int main() {
+	ll n; in(n);
+	vector<ll> arr(n + 1);
+	ll q; in(q);
+	flf(1, n + 1, i) {
+		in(arr[i]);
+	}
+	queries(arr, n, q);
+
+	return 0;
+}
