@@ -15,7 +15,7 @@ ll GCD(ll u, ll v) {
 	}
 	return u;
 }
-#define LCM(x,y) ((x)/Gcd(x,y)*(y))
+#define LCM(x,y) ((x)/GCD(x,y)*(y))
 ll i,j,INF = 100000000000000,MOD=1000000007;
 using namespace std;
 typedef pair<ll, ll> lp;
