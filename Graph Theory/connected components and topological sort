@@ -1,0 +1,199 @@
+//template to get connected components of graph for undirected graph
+//it will store these components in a vector of graphs
+//it can also do topological sort if we make it directed by commenting the reverse edge
+//Time complexity in both the cases is O(n+e) which is time required for DFS
+//#include<bits/stdc++.h>
+#ifndef _GLIBCXX_NO_ASSERT
+#include <cassert>
+#endif
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <ciso646>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <csetjmp>
+#include <csignal>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#if __cplusplus >= 201103L
+#include <ccomplex>
+#include <cfenv>
+#include <cinttypes>
+#include <cstdalign>
+#include <cstdbool>
+#include <cstdint>
+#include <ctgmath>
+#include <cwchar>
+#include <cwctype>
+#endif
+
+// C++
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
+#define line cout<<"\n"
+#define ll long long
+#define in(a) cin>>a
+#define out(a) cout<<a<<" "
+#define flf(a,b,i) for(ll i=a;i<b;++i)
+#define flb(a,b,i) for(ll i=a-1;i>=b;--i)
+#define fdiv(a,b) double(a)/double(b)
+#define idiv(a,b) ll(a/b)
+ll GCD(ll u, ll v) {
+	while (v != 0) {
+		ll r = u % v;
+		u = v;
+		v = r;
+	}
+	return u;
+}
+#define LCM(x,y) ((x)/GCD(x,y)*(y))
+ll i, j, INF = 100000000000000, MOD = 1000000007;
+using namespace std;
+typedef pair<ll, ll> lp;
+typedef vector<set<ll> > vset;
+typedef vector<list<ll> > vlinked;
+ll count = 1;
+stack<ll> stk;
+
+class graph
+{
+	ll v;
+	list<ll> *adj;
+	void dfsUtil(bool[], ll i);
+	vset components;
+	vlinked topology;
+public:
+	graph(ll v);
+	void addEdge(ll u, ll v);
+	void dfs();
+};
+
+
+graph::graph(ll v)
+{
+	this->v = v;
+	adj = new list<ll>[v];
+}
+
+
+void graph::addEdge(ll a, ll b)
+{
+	adj[a].push_back(b);
+	//adj[b].push_back(a);
+}
+
+
+void graph::dfsUtil(bool visited[], ll i)
+{
+	visited[i] = true;
+	//cout << i << " ";
+	list<ll>::iterator it;
+	for (it = adj[i].begin(); it != adj[i].end(); it++)
+	{
+		if (!visited[*it])
+			dfsUtil(visited, *it);
+	}
+	stk.push(i);
+
+}
+
+void graph::dfs()
+{
+	bool *visited = new bool[v];
+	for (ll i = 0; i < v; i++)
+		visited[i] = false;
+	//cout << "The connected components in the undirected graph are " << endl;
+	for (ll i = 0; i < v; i++)
+	{
+		if (!visited[i])
+			dfsUtil(visited, i);
+		set<ll> comp;
+		while (!stk.empty()) {
+			ll temp = stk.top();
+			comp.insert(temp);
+			stk.pop();
+		}
+		components.push_back(comp);
+		//cout << endl;
+	}
+}
+
+
+int main()
+{
+	ll v, e, m, n;
+	//cout << "Enter no of vertices" << endl;
+	cin >> v;
+	graph g(v);
+	//cout << "Enter no of edges " << endl;
+	cin >> e;
+	for (ll i = 0; i < e; i++)
+	{
+		//cout << "Enter vertices of edge " << i + 1 << endl;
+		cin >> m >> n;
+		m--; n--;
+		g.addEdge(m, n);
+		g.addEdge(n, m);
+	}
+	g.dfs();
+	return 0;
+}
