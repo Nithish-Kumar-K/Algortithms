@@ -7,6 +7,11 @@
 #define flb(a,b,i) for(ll i=a-1;i>=b;--i)
 #define fdiv(a,b) double(a)/double(b)
 #define idiv(a,b) ll(a/b)
+#define FILL(a, val) memset((a), (val), sizeof(a))
+#define modmul(a,b,c) (((a%c)*(b%c))%c)
+#define modadd(a,b,c) (((a%c)+(b%c))%c)
+#define modsub(a,b,c) (((a%c)-(b%c))%c)
+
 ll GCD(ll u, ll v) {
 	while (v != 0) {
 		unsigned r = u % v;
